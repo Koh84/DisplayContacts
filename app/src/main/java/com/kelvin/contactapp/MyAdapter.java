@@ -1,6 +1,11 @@
 package com.kelvin.contactapp;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.IOException;
 import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
@@ -36,12 +42,27 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
     public void onBindViewHolder(@NonNull MyAdapter.MyViewHolder holder, int position) {
 
         TextView contact_name, contact_number;
+        ImageView myImage;
 
         contact_name =  holder.contact_name;
         contact_number = holder.contact_number;
+        myImage = holder.myImage;
 
         contact_name.setText(mListContacts.get(position).getName());
         contact_number.setText(mListContacts.get(position).getNumber());
+
+        try
+        {
+            String image_uri = mListContacts.get(position).getImage();
+            if(image_uri!=null)
+            {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), Uri.parse(image_uri));
+                myImage.setImageBitmap(bitmap);
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
