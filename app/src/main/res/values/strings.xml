@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">My Contacts</string>
+    <string-array name="programming_languages">
+        <item>C++</item>
+        <item>C</item>
+        <item>Java</item>
+    </string-array>
+    <string-array name="description">
+        <item>This is random cpp description</item>
+        <item>This is random c description</item>
+        <item>This is random java description</item>
+    </string-array>
+</resources>
