@@ -1,8 +1,5 @@
 package com.kelvin.contactapp;
 
-import android.provider.ContactsContract;
-import android.util.Log;
-
 public class MyContacts {
     private String name, number, image, id;
 
@@ -11,6 +8,7 @@ public class MyContacts {
         this.number = number;
         this.image = image;
         this.id = id;
+        System.out.println("contact id: "+id);
     }
 
     public String getName() {
@@ -40,5 +38,10 @@ public class MyContacts {
     public String getId() {
         return id;
     }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
 
 }

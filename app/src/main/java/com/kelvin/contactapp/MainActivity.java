@@ -5,31 +5,22 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.Manifest;
 import android.app.Activity;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.provider.MediaStore;
 import android.util.Log;
-import android.view.View;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MyAdapter.OnContactListener {
 
     RecyclerView recyclerView;
-
-    int images[]={R.drawable.cpp,R.drawable.c,R.drawable.java};
 
     private static final int REQUEST_RUNTIME_PERMISSION = 123;
     String[] permissons = {Manifest.permission.READ_CONTACTS,
@@ -93,35 +84,22 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.OnConta
             cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
             , cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
             , cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_URI))
-            , cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup._ID))
+            , cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID))
             ));
-
-            //Log.d("Main", cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.PhoneLookup._ID)));
         }
-
+        cursor.close();
 
         return list;
     }
 
     @Override
-    public void onContactClick(String contact_name) {
-    /*    Intent intent = new Intent(Intent.ACTION_VIEW);
-        Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, String.valueOf(contact_name));
+    public void onContactClick(String contact_id) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, String.valueOf(contact_id));
         intent.setData(uri);
-        startActivity(intent);*/
+        startActivity(intent);
 
-   /*     String contactId = null;
-        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
-        String[] projection = new String[] { ContactsContract.PhoneLookup._ID };
-        Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
-        if (cursor != null) {
-            while (cursor.moveToNext()) {
-                contactId = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.PhoneLookup._ID));
-            }
-            cursor.close();
-        }*/
-
-        Log.d("Main","contact_id : "+ contact_name);
+        Log.d("Main","contact_id : "+ contact_id);
     }
 
 }
