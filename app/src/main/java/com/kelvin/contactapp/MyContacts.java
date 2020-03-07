@@ -1,13 +1,16 @@
 package com.kelvin.contactapp;
 
-public class MyContacts {
-    private String name, number, image;
+import android.provider.ContactsContract;
+import android.util.Log;
 
-    public MyContacts(String name, String number, String image) {
+public class MyContacts {
+    private String name, number, image, id;
+
+    public MyContacts(String name, String number, String image, String id) {
         this.name = name;
         this.number = number;
         this.image = image;
-       //System.out.println("image string 3 : "+image);
+        this.id = id;
     }
 
     public String getName() {
@@ -33,4 +36,9 @@ public class MyContacts {
     public void setImage(String image) {
         this.image = image;
     }
+
+    public String getId() {
+        return id;
+    }
+
 }

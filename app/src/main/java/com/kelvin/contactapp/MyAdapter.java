@@ -1,10 +1,12 @@
 package com.kelvin.contactapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,11 +25,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
     int images[];
     private Context mContext;
     private List<MyContacts> mListContacts;
+    private OnContactListener mOnContactListener;
 
-    public MyAdapter(Context context, List<MyContacts> listContacts) {
+    public MyAdapter(Context context, List<MyContacts> listContacts, OnContactListener mOnContactListener) {
         mContext = context;
         mListContacts = listContacts;
-        //images = img;
+        this.mOnContactListener = mOnContactListener;
     }
 
     @NonNull
@@ -35,7 +38,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
     public MyAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
         View view = inflater.inflate(R.layout.my_row, parent, false);
-        return new MyViewHolder(view);
+        return new MyViewHolder(view, mOnContactListener);
     }
 
     @Override
@@ -43,13 +46,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
 
         TextView contact_name, contact_number;
         ImageView myImage;
+        String contact_id;
 
         contact_name =  holder.contact_name;
         contact_number = holder.contact_number;
         myImage = holder.myImage;
+        contact_id = holder.contact_id;
 
         contact_name.setText(mListContacts.get(position).getName());
         contact_number.setText(mListContacts.get(position).getNumber());
+        contact_id = mListContacts.get(position).getId();
 
         try
         {
@@ -70,17 +76,35 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
         return mListContacts.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
         TextView contact_name, contact_number;
         ImageView myImage;
+        String contact_id;
+        OnContactListener onContactListener;
 
-        public MyViewHolder(@NonNull View itemView) {
+        public MyViewHolder(@NonNull View itemView, OnContactListener onContactListener) {
             super(itemView);
 
             contact_name = itemView.findViewById(R.id.myTitle);
             contact_number = itemView.findViewById(R.id.myDescription);
             myImage = itemView.findViewById(R.id.myImage);
+
+            this.onContactListener = onContactListener;
+
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View view)
+        {
+            //onContactListener.onContactClick(getAdapterPosition());
+            onContactListener.onContactClick((String)contact_name.getText());
+        }
+    }
+
+    public interface OnContactListener
+    {
+        void onContactClick(String contact_name);
     }
 }
