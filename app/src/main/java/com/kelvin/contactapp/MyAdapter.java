@@ -41,11 +41,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
         TextView contact_name, contact_number, contact_id;
         ImageView myImage;
 
+        // Bind the local views with holder's views
         contact_name =  holder.contact_name;
         contact_number = holder.contact_number;
         myImage = holder.myImage;
         contact_id = holder.contact_id;
 
+        // set view texts from given contact list
         contact_name.setText(mListContacts.get(position).getName());
         contact_number.setText(mListContacts.get(position).getNumber());
         contact_id.setText(mListContacts.get(position).getId());
@@ -54,13 +56,15 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
 
         try
         {
+            // get string for image from contact list
             String image_uri = mListContacts.get(position).getImage();
             if(image_uri!=null)
             {
+                // get bitmap from given content resolver from given image uri
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), Uri.parse(image_uri));
                 myImage.setImageBitmap(bitmap);
             }
-            else
+            else // set default image if not found
                 myImage.setImageResource(R.drawable.c);
         }
         catch (IOException e) {
@@ -97,10 +101,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
         public void onClick(View view)
         {
             //onContactListener.onContactClick(getAdapterPosition());
+            // pass the contact id from contact list to launch specific contact list intent
             onContactListener.onContactClick(contact_id.getText().toString());
         }
     }
 
+    // interface to handle MyViewHolder click
     public interface OnContactListener
     {
         void onContactClick(String contact_id);
