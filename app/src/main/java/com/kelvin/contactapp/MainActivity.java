@@ -71,21 +71,41 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.OnConta
 
     private List<MyContacts> getContacts()
     {
+        boolean addNewContact;
+
         List<MyContacts> list = new ArrayList<>();
 
-        Cursor cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,null,
+        //Uri uri1 = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
+
+        Uri uri2 = ContactsContract.CommonDataKinds.Phone.CONTENT_URI.buildUpon().
+                appendQueryParameter(ContactsContract.REMOVE_DUPLICATE_ENTRIES, "true").build();
+
+        //Uri uri3 = ContactsContract.CommonDataKinds.Phone.CONTENT_URI.buildUpon().
+        //        appendQueryParameter(ContactsContract.STREQUENT_PHONE_ONLY, "true").build();
+
+        Cursor cursor = getContentResolver().query(uri2,null,
                 null, null, ContactsContract.Contacts.DISPLAY_NAME+ " ASC");
 
         cursor.moveToFirst();
 
         while(cursor.moveToNext())
         {
-            list.add(new MyContacts(
-            cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
-            , cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
-            , cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_URI))
-            , cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID))
-            ));
+            addNewContact = true;
+            for (MyContacts addedC : list)
+            {
+                if (addedC.getId().equals(cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID))))
+                    addNewContact = false;
+            }
+
+            if(addNewContact)
+            {
+                list.add(new MyContacts(
+                        cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
+                        , cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+                        , cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_URI))
+                        , cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID))
+                ));
+            }
         }
         cursor.close();
 
