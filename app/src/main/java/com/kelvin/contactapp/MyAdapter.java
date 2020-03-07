@@ -60,6 +60,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), Uri.parse(image_uri));
                 myImage.setImageBitmap(bitmap);
             }
+            else
+                myImage.setImageResource(R.drawable.c);
         }
         catch (IOException e) {
             e.printStackTrace();
